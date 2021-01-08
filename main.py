@@ -17,7 +17,7 @@ file_cuts = math.floor(NUMBER_OF_GAMES / FILE_PARTS)
 # Wild cards, can be placed anywhere
 WILD_CARDS = {12, 13}
 GOOD_CARDS = set()
-# Get a list of all cards on the pile
+# Good cards, a list of all cards on the pile
 for i in range(NUMBER_OF_CARDS):
     GOOD_CARDS.add(i)
 # All cards that could be played
@@ -43,15 +43,17 @@ def play_game():
             13, 13]          # Joker
     shuffle(deck)
 
-    # Generate a pile of cardgts
+    # Generate a pile of cards
     pile = [0, 0, 0, 0, 0]
 
     # Create an empty hand
     hand = None
 
-    # Grab either revealed card or draw the first card
+    # Flip over the revealed card
     revealed_card = deck.pop()
 
+    # If revealed card is playable grab that
+    # Otherwise pick top card from deck
     if revealed_card in ALL_CARDS:
         hand = revealed_card
     else:
@@ -61,6 +63,7 @@ def play_game():
     while hand in ALL_CARDS:
         # Index of hand
         chosen_index = hand
+        
         if hand in WILD_CARDS:
             # Check number of not flipped and largest stack
             turned = len(pile) - pile.count(0)
@@ -99,12 +102,13 @@ games = []
 # Run games x times and store results
 for i in range(1, NUMBER_OF_GAMES + 1):
     games.append(play_game())
-    # If at a cut point write data and reset game list
+    # If at a cut point, write data and reset game list
     if i % file_cuts == 0:
         print(f'Writing data/results-{i}.json...')
         with open(f'data/results-{i}.json', 'w') as speed_games:
             dump(games, speed_games)
         games = []
 
+# Print final execution time
 end = time.time()
 print(f"Execution Time in Seconds: {end - begin}")
