@@ -6,11 +6,13 @@ import json
 # Grab data from bank file
 bank_file_names = glob.glob('data/bank-*.json')
 bank_files = []
+# Messy code to grab numbers from each filename
 for file_name in bank_file_names:
     file_id = file_name.split('-')[1].split('.')[0]
     bank_files.append(int(file_id))
 
 bank_history = []
+# Grab contents from files in number order
 for num in sorted(bank_files):
     with open(f'data/bank-{num}.json') as bank_file:
         bank_history += json.load(bank_file)
